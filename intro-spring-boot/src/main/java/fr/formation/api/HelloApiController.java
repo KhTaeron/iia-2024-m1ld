@@ -1,6 +1,7 @@
 package fr.formation.api;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,15 @@ public class HelloApiController {
         return HelloResponse.builder()
             // .user(username)
             .user(request.getUsername())
+            .build()
+        ;
+    }
+    
+    @GetMapping("/{id}")
+    public HelloResponse getHelloPv(@PathVariable String id) {
+        return HelloResponse.builder()
+            // .user(username)
+            .user(id)
             .build()
         ;
     }
