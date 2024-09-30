@@ -1,6 +1,7 @@
 package fr.formation.repo;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +20,18 @@ public class ProduitRepository {
             .createQuery("select p from Produit p", Produit.class)
             .getResultList()
         ;
+    }
+
+    public Optional<Produit> findById(String id) {
+        try {
+            Produit produit = this.em.find(Produit.class, id);
+
+            return Optional.ofNullable(produit);
+        }
+
+        catch (Exception ex) {
+            return Optional.empty();
+        }
     }
 
     @Transactional // Spring qui va gérer la transaction - ouverture, commit ou rollback si erreur
