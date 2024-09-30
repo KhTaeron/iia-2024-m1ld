@@ -6,5 +6,4 @@ import lombok.Setter;
 @Getter @Setter
 public class CreateCommentRequest {
     private String content;
-    private String videoId;
 }
