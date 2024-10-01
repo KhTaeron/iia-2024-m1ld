@@ -20,4 +20,13 @@ public class User {
     
     @Column(name = "usr_name", length = 50, nullable = false)
     private String name;
+
+    @Column(name = "usr_username", length = 50, nullable = false)
+    private String username;
+
+    @Column(name = "usr_password", length = 500, nullable = false)
+    private String password;
+
+    @Column(name = "usr_admin", nullable = false)
+    private boolean admin;
 }

@@ -4,8 +4,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,9 +38,6 @@ public class CommentApiController {
     private final VideoRepository videoRepository;
     private final UserRepository userRepository;
 
-    @Value("${youtube.default-user-id}")
-    private String defaultUserId;
-
     @GetMapping
     public List<CommentResponse> findAllByVideoId(@PathVariable String videoId) {
         log.debug("Finding all comments for video {} ...", videoId);
@@ -59,11 +58,12 @@ public class CommentApiController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String create(@PathVariable String videoId, @RequestBody CreateCommentRequest request) {
-        log.debug("Creating comment for video {} from user {} ...", videoId, defaultUserId);
+    @PreAuthorize("isAuthenticated()")
+    public String create(@PathVariable String videoId, @RequestBody CreateCommentRequest request, Authentication authentication) {
+        log.debug("Creating comment for video {} from user {} ...", videoId, authentication.getPrincipal());
 
         Video video = this.videoRepository.findById(videoId).orElseThrow(VideoNotFoundException::new);
-        User user = this.userRepository.findById(defaultUserId).orElseThrow(UserNotFoundException::new);
+        User user = this.userRepository.findById(authentication.getPrincipal().toString()).orElseThrow(UserNotFoundException::new);
         Comment comment = new Comment();
 
         BeanUtils.copyProperties(request, comment);
@@ -77,5 +77,15 @@ public class CommentApiController {
         log.debug("Comment {} created!", comment.getId());
 
         return comment.getId();
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteById(@PathVariable String id, @PathVariable String videoId) {
+        log.debug("Deleting comment {} from video {} ...", id, videoId);
+
+        this.repository.deleteById(id);
+
+        log.debug("Comment {} deleted!", id);
     }
 }

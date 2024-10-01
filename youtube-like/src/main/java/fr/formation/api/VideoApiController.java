@@ -4,8 +4,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,9 +37,6 @@ public class VideoApiController {
     private final VideoRepository repository;
     private final UserRepository userRepository;
 
-    @Value("${youtube.default-user-id}")
-    private String defaultUserId;
-
     @GetMapping
     public List<VideoResponse> findAll() {
         log.debug("Finding all videos ...");
@@ -64,11 +62,12 @@ public class VideoApiController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String create(@RequestBody CreateOrUpdateVideoRequest request) {
+    @PreAuthorize("isAuthenticated()")
+    public String create(@RequestBody CreateOrUpdateVideoRequest request, Authentication authentication) {
         log.debug("Creating video ...");
 
         Video video = new Video();
-        User owner = this.userRepository.findById(defaultUserId).orElseThrow(UserNotFoundException::new);
+        User owner = this.userRepository.findById(authentication.getPrincipal().toString()).orElseThrow(UserNotFoundException::new);
 
         BeanUtils.copyProperties(request, video);
 
@@ -83,6 +82,7 @@ public class VideoApiController {
     }
     
     @PutMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public String update(@PathVariable String id, @RequestBody CreateOrUpdateVideoRequest request) {
         log.debug("Updating video {} ...", id);
         
@@ -98,6 +98,7 @@ public class VideoApiController {
     }
     
     @DeleteMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
     public void deleteById(@PathVariable String id) {
         log.debug("Deleting video {} ...", id);
         
