@@ -34,28 +34,28 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean // Configuration des users (Authentication)
-    UserDetailsService inMemory(PasswordEncoder passwordEncoder) {
-        InMemoryUserDetailsManager inMemory = new InMemoryUserDetailsManager();
+    // @Bean // Configuration des users (Authentication)
+    // UserDetailsService inMemory(PasswordEncoder passwordEncoder) {
+    //     InMemoryUserDetailsManager inMemory = new InMemoryUserDetailsManager();
 
-        inMemory.createUser(
-            User.withUsername("user")
-                // .password("{noop}123456")
-                .password(passwordEncoder.encode("123456"))
-                // .authorities("ROLE_USER")
-                .roles("USER") // C'est pareil que ROLE_USER
-                .build()
-        );
+    //     inMemory.createUser(
+    //         User.withUsername("user")
+    //             // .password("{noop}123456")
+    //             .password(passwordEncoder.encode("123456"))
+    //             // .authorities("ROLE_USER")
+    //             .roles("USER") // C'est pareil que ROLE_USER
+    //             .build()
+    //     );
 
-        inMemory.createUser(
-            User.withUsername("admin")
-                .password(passwordEncoder.encode("123456$"))
-                // .authorities("ROLE_ADMIN")
-                .roles("ADMIN") // C'est pareil que ROLE_USER
-                .build()
-        );
+    //     inMemory.createUser(
+    //         User.withUsername("admin")
+    //             .password(passwordEncoder.encode("123456$"))
+    //             // .authorities("ROLE_ADMIN")
+    //             .roles("ADMIN") // C'est pareil que ROLE_USER
+    //             .build()
+    //     );
 
-        return inMemory;
-    }
+    //     return inMemory;
+    // }
 
 }
