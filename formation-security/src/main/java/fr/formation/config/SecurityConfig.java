@@ -4,18 +4,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig {
 
     @Bean // Configuration des accès (Authorization)
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http, JwtHeaderFilter jwtHeaderFilter) throws Exception {
         http.authorizeHttpRequests(authorize -> {
             // authorize.requestMatchers("/api/fournisseur/**").hasAuthority("ROLE_ADMIN");
             authorize.requestMatchers("/api/fournisseur/**").hasRole("ADMIN");
@@ -28,6 +26,8 @@ public class SecurityConfig {
 
         // http.formLogin(Customizer.withDefaults());
         http.httpBasic(Customizer.withDefaults());
+
+        http.addFilterBefore(jwtHeaderFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
