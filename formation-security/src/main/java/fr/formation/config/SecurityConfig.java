@@ -20,8 +20,11 @@ public class SecurityConfig {
             // authorize.requestMatchers("/api/fournisseur/**").hasAuthority("ROLE_ADMIN");
             authorize.requestMatchers("/api/fournisseur/**").hasRole("ADMIN");
 
-            authorize.requestMatchers("/**").authenticated(); 
+            authorize.requestMatchers("/api/utilisateur/subscribe").permitAll();
+            authorize.requestMatchers("/**").authenticated();
         });
+
+        http.csrf(csrf -> csrf.disable());
 
         // http.formLogin(Customizer.withDefaults());
         http.httpBasic(Customizer.withDefaults());
