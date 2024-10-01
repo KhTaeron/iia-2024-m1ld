@@ -23,7 +23,8 @@ public class SecurityConfig {
             authorize.requestMatchers("/**").authenticated(); 
         });
 
-        http.formLogin(Customizer.withDefaults());
+        // http.formLogin(Customizer.withDefaults());
+        http.httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
