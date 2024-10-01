@@ -43,7 +43,7 @@ public class CommentApiController {
     public List<CommentResponse> findAllByVideoId(@PathVariable String videoId) {
         log.debug("Finding all comments for video {} ...", videoId);
 
-        return this.repository.findAll()
+        return this.repository.findAllByVideoId(videoId)
             .stream()
             .map(comment -> CommentResponse.builder()
                 .id(comment.getId())

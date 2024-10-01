@@ -31,7 +31,7 @@ public class Comment {
     @JoinColumn(name = "com_video_id", nullable = false)
     @ManyToOne
     private Video video;
-    
+
     @JoinColumn(name = "com_user_id", nullable = false)
     @ManyToOne
     private User user;
