@@ -20,7 +20,7 @@ public class UtilisateurApiController {
     private final UtilisateurRepository repository;
     private final PasswordEncoder passwordEncoder;
 
-    @PostMapping
+    @PostMapping("/subscribe")
     @ResponseStatus(HttpStatus.CREATED)
     public String subscribe(@RequestBody SubscribeRequest request) {
         Utilisateur utilisateur = new Utilisateur();
