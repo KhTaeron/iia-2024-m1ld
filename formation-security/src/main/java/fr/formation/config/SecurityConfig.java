@@ -2,7 +2,9 @@ package fr.formation.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,7 +20,7 @@ public class SecurityConfig {
             // authorize.requestMatchers("/api/fournisseur/**").hasAuthority("ROLE_ADMIN");
             authorize.requestMatchers("/api/fournisseur/**").hasRole("ADMIN");
 
-            authorize.requestMatchers("/api/utilisateur/subscribe").permitAll();
+            authorize.requestMatchers("/api/utilisateur/subscribe", "/api/utilisateur/auth").permitAll();
             authorize.requestMatchers("/**").authenticated();
         });
 
@@ -35,6 +37,11 @@ public class SecurityConfig {
     @Bean // Configuration de l'encodeur de mot de passe
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 
     // @Bean // Configuration des users (Authentication)

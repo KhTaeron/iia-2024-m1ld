@@ -23,16 +23,17 @@ public class JwtHeaderFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = this.getToken(request);
 
-        if (token != null) {
+        if (token != null && JwtUtil.isValid(token)) {
             List<GrantedAuthority> authorities = new ArrayList<>();
 
-            if (token.equals("admin")) {
-                authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-            }
+            // TODO : Chercher une autre implémentation pour correspondre à une réalité
+            // if (token.equals("admin")) {
+            //     authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            // }
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(
-                "username",
-                "username",
+                "username", // FIXME Indiquer le username concret
+                null,
                 authorities
             );
 
