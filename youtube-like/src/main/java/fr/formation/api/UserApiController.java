@@ -21,6 +21,7 @@ import fr.formation.request.AuthRequest;
 import fr.formation.request.SubscribeRequest;
 import fr.formation.response.AuthResponse;
 import fr.formation.security.JwtUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -34,7 +35,7 @@ public class UserApiController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/auth")
-    public AuthResponse auth(@RequestBody AuthRequest request) {
+    public AuthResponse auth(@Valid @RequestBody AuthRequest request) {
         log.debug("Authenticating requested for user {} ...", request.getUsername());
 
         try {
@@ -67,7 +68,7 @@ public class UserApiController {
     
     @PostMapping("/subscribe")
     @ResponseStatus(HttpStatus.CREATED)
-    public String subscribe(@RequestBody SubscribeRequest request) {
+    public String subscribe(@Valid @RequestBody SubscribeRequest request) {
         log.debug("User {} subscribing ...", request.getUsername());
         
         User user = new User();

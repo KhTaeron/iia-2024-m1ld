@@ -26,6 +26,7 @@ import fr.formation.repo.UserRepository;
 import fr.formation.repo.VideoRepository;
 import fr.formation.request.CreateCommentRequest;
 import fr.formation.response.CommentResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -59,7 +60,7 @@ public class CommentApiController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("isAuthenticated()")
-    public String create(@PathVariable String videoId, @RequestBody CreateCommentRequest request, Authentication authentication) {
+    public String create(@PathVariable String videoId, @Valid @RequestBody CreateCommentRequest request, Authentication authentication) {
         log.debug("Creating comment for video {} from user {} ...", videoId, authentication.getPrincipal());
 
         Video video = this.videoRepository.findById(videoId).orElseThrow(VideoNotFoundException::new);

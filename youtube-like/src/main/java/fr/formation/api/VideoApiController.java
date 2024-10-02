@@ -26,6 +26,7 @@ import fr.formation.repo.VideoRepository;
 import fr.formation.request.CreateOrUpdateVideoRequest;
 import fr.formation.response.VideoByIdResponse;
 import fr.formation.response.VideoResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -63,7 +64,7 @@ public class VideoApiController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("isAuthenticated()")
-    public String create(@RequestBody CreateOrUpdateVideoRequest request, Authentication authentication) {
+    public String create(@Valid @RequestBody CreateOrUpdateVideoRequest request, Authentication authentication) {
         log.debug("Creating video ...");
 
         Video video = new Video();
@@ -83,7 +84,7 @@ public class VideoApiController {
     
     @PutMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String update(@PathVariable String id, @RequestBody CreateOrUpdateVideoRequest request) {
+    public String update(@PathVariable String id, @Valid @RequestBody CreateOrUpdateVideoRequest request) {
         log.debug("Updating video {} ...", id);
         
         Video video = this.repository.findById(id).orElseThrow(VideoNotFoundException::new);
@@ -101,8 +102,14 @@ public class VideoApiController {
     @PreAuthorize("isAuthenticated()")
     public void deleteById(@PathVariable String id) {
         log.debug("Deleting video {} ...", id);
-        
-        this.repository.deleteById(id);
+    
+        try {
+            this.repository.deleteById(id);
+        }
+
+        catch (Exception ex) {
+            log.error("Can't delete video {}! Comments may exist!", id);
+        }
 
         log.debug("Video {} deleted!", id);
     }
