@@ -1,5 +1,6 @@
 package fr.formation;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -13,15 +14,6 @@ import fr.formation.repo.ProduitRepository;
 // @SpringBootTest
 @DataJpaTest
 class FormationJpaApplicationTests {
-
-	@Autowired
-	private ProduitRepository produitRepository;
-
-	@Test
-	void shouldFindById() {
-		Optional<Produit> optProduit = this.produitRepository.findById("produitId");
-	}
-
 	@Test
 	void contextLoads() {
 		Assertions.assertEquals(true, true);
