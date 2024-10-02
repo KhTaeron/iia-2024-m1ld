@@ -20,6 +20,7 @@ import fr.formation.repo.ProduitRepository;
 import fr.formation.request.CreateProduitRequest;
 import fr.formation.response.ProduitByIdResponse;
 import fr.formation.response.ProduitResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -54,7 +55,7 @@ public class ProduitApiController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String create(@RequestBody CreateProduitRequest request) {
+    public String create(@Valid @RequestBody CreateProduitRequest request) {
         Produit produit = new Produit();
         Fournisseur fournisseur = new Fournisseur();
 

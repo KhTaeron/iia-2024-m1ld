@@ -97,6 +97,32 @@ public class ProduitApiControllerTest {
     }
 
     @Test
+    void shouldCreateStatusBadRequest() throws Exception {
+        // given
+        CreateProduitRequest request = new CreateProduitRequest();
+
+        request.setPrice(new BigDecimal("123"));
+        request.setFournisseurId("le-fournisseur-id");
+
+        ObjectMapper mapper = new ObjectMapper();
+        String content = mapper.writeValueAsString(request);
+
+        // when
+        this.mockMvc.perform(
+            MockMvcRequestBuilders
+                .post("/api/produit")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content)
+            )
+
+        // then
+            .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        ;
+
+        Mockito.verify(this.repository, Mockito.never()).save(Mockito.any());
+    }
+
+    @Test
     void shouldFindAllReturnsProduitResponses() {
         // Given
         Produit p1 = new Produit();
