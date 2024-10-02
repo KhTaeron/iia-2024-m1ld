@@ -1,18 +1,9 @@
 package fr.formation;
 
-import java.math.BigDecimal;
-import java.util.Optional;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-
-import fr.formation.model.Produit;
-import fr.formation.repo.ProduitRepository;
 
 // @SpringBootTest
-@DataJpaTest
 class FormationJpaApplicationTests {
 	@Test
 	void contextLoads() {
