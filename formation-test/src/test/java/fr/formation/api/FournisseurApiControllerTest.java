@@ -11,48 +11,48 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ProduitApiControllerTest {
-    // @Autowired
-    // private ProduitRepository repository;
-
-    // @Autowired
-    // private ProduitApiController ctrl;
-
+public class FournisseurApiControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    void shouldFindAllStatusUnauthorized() throws Exception {
+    void shouldFindAllStatusUnauthorizedWhenNotLogged() throws Exception {
         // given
 
         // when
         this.mockMvc
-            .perform(
-                MockMvcRequestBuilders.get("/api/produit")
-            )
+            .perform(MockMvcRequestBuilders.get("/api/fournisseur"))
         
         // then
             .andExpect(MockMvcResultMatchers.status().isUnauthorized())
         ;
-
-        // Mockito.verify(this.repository).findAll();
     }
 
     @Test
     @WithMockUser
-    void shouldFindAllStatusOk() throws Exception {
+    void shouldFindAllStatusForbiddenWhenNotAdmin() throws Exception {
         // given
 
         // when
         this.mockMvc
-            .perform(
-                MockMvcRequestBuilders.get("/api/produit")
-            )
+            .perform(MockMvcRequestBuilders.get("/api/fournisseur"))
+        
+        // then
+            .andExpect(MockMvcResultMatchers.status().isForbidden())
+        ;
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void shouldFindAllStatusOkWhenAdmin() throws Exception {
+        // given
+
+        // when
+        this.mockMvc
+            .perform(MockMvcRequestBuilders.get("/api/fournisseur"))
         
         // then
             .andExpect(MockMvcResultMatchers.status().isOk())
         ;
-
-        // Mockito.verify(this.repository).findAll();
     }
 }
