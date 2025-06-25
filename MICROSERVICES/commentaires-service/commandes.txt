@@ -16,3 +16,6 @@ export PATH="$PATH:/root/.dotnet/tools"
 dotnet add package Microsoft.EntityFrameworkCore.Design
 dotnet ef migrations add InitialCreate
 dotnet ef database update
+
+# Client Eureka
+dotnet add package Steeltoe.Discovery.Eureka

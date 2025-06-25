@@ -6,7 +6,8 @@ builder.Services.AddControllers();
 
 builder.Services.UseDbContextConfiguration(builder.Configuration.GetConnectionString("CommentaireContext"));
 
-builder.Services.UseHttpConfiguration("produit-service", "http://127.0.0.1:8081");
+builder.Services.UseEurekaConfiguration();
+builder.Services.UseHttpConfiguration("produit-service", "lb://produit-service");
 
 var app = builder.Build();
 
