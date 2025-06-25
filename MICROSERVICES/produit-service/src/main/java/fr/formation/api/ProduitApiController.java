@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.formation.exception.ProduitNotFoundException;
-import fr.formation.model.Commentaire;
+import fr.formation.feignclient.CommentaireFeignClient;
 import fr.formation.model.Produit;
-import fr.formation.repo.CommentaireRepository;
 import fr.formation.repo.ProduitRepository;
 import fr.formation.request.CreateOrUpdateProduitRequest;
 import fr.formation.response.CommentaireResponse;
@@ -28,18 +27,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ProduitApiController {
     private final ProduitRepository repository;
-    private final CommentaireRepository commentaireRepository;
+    private final CommentaireFeignClient commentaireFeignClient;
 
     @GetMapping
     public List<ProduitResponse> findAll() {
         return this.repository.findAll()
             .stream()
             .map(p -> {
-                 int note = (int)this.commentaireRepository.findAllByProduitId(p.getId())
-                    .stream()
-                    .mapToInt(Commentaire::getNote)
-                    .average()
-                    .orElse(-1);
+                int note = this.commentaireFeignClient.getNoteByProduitId(p.getId());
 
                 return ProduitResponse.builder()
                     .id(p.getId())
@@ -56,12 +51,12 @@ public class ProduitApiController {
     @GetMapping("/{id}")
     public ProduitByIdResponse findById(@PathVariable String id) {
         Produit produit = this.repository.findById(id).orElseThrow(ProduitNotFoundException::new);
-        List<Commentaire> commentaires = this.commentaireRepository.findAllByProduitId(id);
+        List<CommentaireResponse> commentaires = this.commentaireFeignClient.findAllByProduitId(id);
         ProduitByIdResponse resp = new ProduitByIdResponse();
 
         int note = (int)commentaires
             .stream()
-            .mapToInt(Commentaire::getNote)
+            .mapToInt(CommentaireResponse::getNote)
             .average()
             .orElse(-1);
 
@@ -80,6 +75,16 @@ public class ProduitApiController {
         resp.setNote(note);
 
         return resp;
+    }
+
+    @GetMapping("/{id}/get-name")
+    public String getNameById(@PathVariable String id) {
+        return this.repository.findById(id).orElseThrow(ProduitNotFoundException::new).getNom();
+    }
+    
+    @GetMapping("/{id}/is-notable")
+    public boolean isNotableById(@PathVariable String id) {
+        return this.repository.findById(id).orElseThrow(ProduitNotFoundException::new).isNotable();
     }
 
     @PostMapping
