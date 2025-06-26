@@ -9,10 +9,10 @@ using Steeltoe.Messaging.RabbitMQ.Extensions;
 namespace commentaire_service.Broker.Consumer;
 
 
-public class CommentaireValidatedOrRejectedEventConsumer {
+public class CommentaireValidatedOrRejectedConsumer {
     private readonly IServiceProvider _services;
 
-    public CommentaireValidatedOrRejectedEventConsumer(IServiceProvider services)
+    public CommentaireValidatedOrRejectedConsumer(IServiceProvider services)
     {
         _services = services;
     }
