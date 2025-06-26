@@ -23,8 +23,8 @@ public static class RabbitMqStartup
         services.AddRabbitQueue("ms.commentaire.commentaire.reject");
 
         // Configuration du service qui captera les évènements reçus
-        services.AddSingleton<CommentaireValidatedOrRejectedEventConsumer>();
-        services.AddRabbitListeners<CommentaireValidatedOrRejectedEventConsumer>();
+        services.AddSingleton<CommentaireValidatedOrRejectedConsumer>();
+        services.AddRabbitListeners<CommentaireValidatedOrRejectedConsumer>();
 
         return services;
     }
