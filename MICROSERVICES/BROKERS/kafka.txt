@@ -1,0 +1,14 @@
+# Exécuter un container Kafka
+docker run -d --name kafka -p 9092:9092 apache/kafka
+
+# Une fois connecté, pour exécuter un producer Kafka
+bin/kafka-console-producer.sh --topic nomtopic --bootstrap-server localhost:9092
+
+# Une fois connecté, pour exécuter un consumer Kafka
+bin/kafka-console-consumer.sh --topic nomtopic --bootstrap-server localhost:9092 --from-beginning
+
+# Une fois connecté, pour lister les topics
+bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
+
+# Une fois connecté, pour supprimer un topic
+bin/kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic nomtopic
